@@ -11,6 +11,7 @@ import requests
 global file_path
 file_path = ''
 
+
 def center_window(root, width, height):
     screenwidth = root.winfo_screenwidth()
     screenheight = root.winfo_screenheight()
