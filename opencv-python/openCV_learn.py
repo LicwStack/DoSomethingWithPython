@@ -1,40 +1,31 @@
+"""
+learn  opencv-python
+"""
 import cv2
+import numpy as np
 
-e1 = cv2.getTickCount()
-img1 = cv2.imread('bg.jpg')
-img2 = cv2.imread('opencv-logo.png')
 
-rows1, cols1, channels1 = img1.shape
-rows2, cols2, channels2 = img2.shape
+img1 = cv2.imread('opencv-logo.png')
+rows, cols = img1.shape[:2]
 
-roi = img1[0:rows2, 0:cols2]
-# cv2.imshow('roi', roi)
+M = np.float32([[1, 0, 100], [0, 1, 50]])
+dst = cv2.warpAffine(img1, M, (cols, rows))
 
-img2gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)  # 灰度处理
-
-ret, mask = cv2.threshold(img2gray, 175, 255, cv2.THRESH_BINARY)  # 二值化处理
-mask_inv = cv2.bitwise_not(mask)  # 颜色取反
-
-# cv2.imshow('mask', mask)
-# cv2.imshow('mask_inv', mask_inv)
-
-img1_bg = cv2.bitwise_and(roi, roi, mask=mask)
-# cv2.imshow('img1_bg', img1_bg)
-
-img2_fg = cv2.bitwise_and(img2, img2, mask=mask_inv)
-# cv2.imshow('img2_fg', img2_fg)
-
-dst = cv2.add(img1_bg, img2_fg)
-# cv2.imshow('dst', dst)
-
-img1[0:rows2, 0:cols2] = dst
-
-cv2.imshow('res', img1)
-
+cv2.imshow('img', dst)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-e2 = cv2.getTickCount()
-time = (e2 - e1)/cv2.getTickFrequency()
-print(time)
-
+# res1 = cv2.resize(img1, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_CUBIC)
+#
+# height, width = img1.shape[:2]
+#
+# res2 = cv2.resize(img1, (2*width, 2*height), interpolation=cv2.INTER_CUBIC)
+#
+# while 1:
+#     cv2.imshow('res1', res1)
+#     cv2.imshow('res2', res2)
+#
+#     if cv2.waitKey(1) & 0xFF == 27:
+#         break
+#
+# cv2.destroyAllWindows()
